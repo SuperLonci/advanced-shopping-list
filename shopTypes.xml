@@ -1,0 +1,10 @@
+<shopTypes>
+    <shopType>
+        <id>SUPERMARKET</id>
+        <name>Supermarkt</name>
+    </shopType>
+    <shopType>
+        <id>TOOLSSTORE</id>
+        <name>Baumarkt</name>
+    </shopType>
+</shopTypes>

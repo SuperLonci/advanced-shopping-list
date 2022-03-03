@@ -1,0 +1,22 @@
+<chains>
+    <chain>
+        <id>REWE</id>
+        <name>Rewe</name>
+        <shopTypeId>SUPERMARKET</shopTypeId>
+        <products>
+            <productId>KARTOFFELN_LOKAL</productId>
+            <productId>WEIHENSTEFFAN_MILCH_1L_FETTARM</productId>
+            <productId>REWE_BESTE_WAHL_PFEFFERONEN</productId>
+        </products>
+    </chain>
+    <chain>
+        <id>ALDI</id>
+        <name>Aldi</name>
+        <shopTypeId>SUPERMARKET</shopTypeId>
+        <products>
+            <productId>KARTOFFELN_LOKAL</productId>
+            <productId>WEIHENSTEFFAN_MILCH_1L_FETTARM</productId>
+            <productId>REWE_BESTE_WAHL_PFEFFERONEN</productId>
+        </products>
+    </chain>
+</chains>

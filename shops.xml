@@ -1,0 +1,16 @@
+<shops>
+    <shop>
+        <id>REWE_MUELLER_NEUREUT</id>
+        <name>Rewe Müller Neureut</name>
+        <chainId>REWE</chainId>
+        <address>Aufm Pott 5</address>
+        <priority>3</priority>
+    </shop>
+    <shop>
+        <id>ALDI_KARLSRUHE_WESTSTADT</id>
+        <name>Aldi Karlsruhe Weststadt</name>
+        <chainId>ALDI</chainId>
+        <address>Aufm Pott 2</address>
+        <priority>2</priority>
+    </shop>
+</shops>
