@@ -1,44 +1,18 @@
 package de.lonci;
 
-import de.lonci.domain.Chain;
-import de.lonci.domain.Product;
-import de.lonci.domain.Shop;
-import de.lonci.domain.ShopType;
-import de.lonci.plugins.XMLDataProvider;
-
-import java.util.Scanner;
+import de.lonci.application.Application;
+import de.lonci.plugins.data.XMLDataProvider;
+import de.lonci.plugins.repository.BinaryStreamShoppingListRepository;
+import de.lonci.plugins.ui.console.ConsoleUserInterface;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Enter Number 1-4 for functions: ");
+        var xmlDataProvider = new XMLDataProvider("./data/");
+        var consoleUserInterface = new ConsoleUserInterface();
+        var shoppingListRepository = new BinaryStreamShoppingListRepository("./data/shoppinglists/");
+        Application application = new Application(xmlDataProvider,consoleUserInterface, shoppingListRepository);
+        application.start();
 
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-
-        XMLDataProvider data = new XMLDataProvider("");
-
-        Shop[] shops = data.getShops();
-        ShopType[] shopTypes = data.getShopTypes();
-        Chain[] chains = data.getChains();
-        Product[] products = data.getProducts();
-
-        if (Integer.parseInt(input) == 1){
-            for (Shop shop : shops) {
-                System.out.println(shop.toString());
-            }
-        }else if (Integer.parseInt(input) == 2){
-            for (ShopType shopType : shopTypes) {
-                System.out.println(shopType.toString());
-            }
-        }else if (Integer.parseInt(input) == 3){
-            for (Chain chain : chains) {
-                System.out.println(chain.toString());
-            }
-        }else if (Integer.parseInt(input) == 4){
-            for (Product product : products) {
-                System.out.println(product.toString());
-            }
-        }
     }
 }

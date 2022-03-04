@@ -1,4 +1,4 @@
-package de.lonci.plugins;
+package de.lonci.plugins.data;
 
 import de.lonci.application.DataProvider;
 import de.lonci.domain.*;
@@ -17,6 +17,8 @@ import javax.xml.parsers.*;
 
 public class XMLDataProvider implements DataProvider {
 
+    String folderPath;
+
     Shop[] shops;
     ShopType[] shopTypes;
     Chain[] chains;
@@ -28,11 +30,9 @@ public class XMLDataProvider implements DataProvider {
     HashMap<String,Product> productHashMap = new HashMap<>();
 
     public XMLDataProvider(String folderPath){
-        readProductsFromXML(folderPath + "products.xml");
-        readShopTypesFromXML(folderPath + "shopTypes.xml");
-        readChainsFromXML(folderPath + "chains.xml");
-        readShopsFromXML(folderPath + "shops.xml");
+        this.folderPath = folderPath;
     }
+
 
     private NodeList parseFile(String filePath, String elementName){
         try {
@@ -190,6 +190,14 @@ public class XMLDataProvider implements DataProvider {
                 shopHashMap.put(id,shops[i]);
             }
         }
+    }
+
+    @Override
+    public void initialize() {
+        readProductsFromXML(folderPath + "products.xml");
+        readShopTypesFromXML(folderPath + "shopTypes.xml");
+        readChainsFromXML(folderPath + "chains.xml");
+        readShopsFromXML(folderPath + "shops.xml");
     }
 
     @Override

@@ -6,6 +6,7 @@ import de.lonci.domain.Shop;
 import de.lonci.domain.ShopType;
 
 public interface DataProvider {
+    void initialize();
     Shop[] getShops();
     ShopType[] getShopTypes();
     Chain[] getChains();
