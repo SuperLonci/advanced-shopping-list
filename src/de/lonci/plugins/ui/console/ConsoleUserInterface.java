@@ -7,6 +7,7 @@ import de.lonci.domain.Shop;
 import de.lonci.domain.ShoppingList;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleUserInterface implements UserInterface {
@@ -40,10 +41,10 @@ public class ConsoleUserInterface implements UserInterface {
             System.out.println("Enter a number to select one of the following functions: ");
             System.out.println("0: Exit");
             System.out.println("1: Select a Shopping List");
-            System.out.println("2: Manage entries in Shopping List");
-            System.out.println("3: Show advanced Shopping List");
-            System.out.println("4: List all shops");
-            System.out.println("5: Create a new Shopping List");
+            System.out.println("2: Show selected Shopping List");
+            System.out.println("3: Manage Shopping List");
+            System.out.println("4: Create a new Shopping List");
+            System.out.println("5: List all shops");
 
             int input = input();
             if (input == 0) {
@@ -51,17 +52,17 @@ public class ConsoleUserInterface implements UserInterface {
             } else if (input == 1) {
                 selectShoppingList();
             } else if (input == 2) {
-                manageShoppingList();
+                outputShoppingList(application.getActiveShoppingList());
             } else if (input == 3) {
-                System.out.println(application.getAdvancedShoppingList().toString());
+                manageShoppingList();
             } else if (input == 4) {
+                application.createNewShoppingList("name", null);
+                System.out.println("New Shopping List created");
+            } else if (input == 5) {
                 for (Shop shop : application.getDataProvider().getShops()) {
                     System.out.println(shop.getName());
                 }
-            } else if (input == 5) {
-                application.createNewShoppingList("name", null);
             }
-
             System.out.println("-----------------------");
             System.out.println("Press enter to continue");
             try {
@@ -72,13 +73,18 @@ public class ConsoleUserInterface implements UserInterface {
         }
     }
 
+    private void outputShoppingList(ShoppingList shoppingList){
+        System.out.println();
+
+    }
+
     private void selectShoppingList(){
         System.out.println("Select a Shopping List: ");
-        ShoppingList[] list = application.getShoppingListRepository().getAll();
-        for (int i = 0; i < (list.length); i++) {
-            System.out.println(i + ": " + list[i].getName());
+        List<ShoppingList> list = application.getShoppingListRepository().getAll();
+        for (int i = 0; i < (list.size()); i++) {
+            System.out.println(i + ": " + list.get(i).getName());
         }
-        application.setActiveShoppingList(application.getShoppingListRepository().getById(list[input()].getId()));
+        application.setActiveShoppingList(application.getShoppingListRepository().getById(list.get(input()).getId()));
         System.out.println(application.getActiveShoppingList().getName() + " selected");
     }
 
