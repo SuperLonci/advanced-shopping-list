@@ -51,6 +51,7 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
             objectOutputStream.writeObject(shoppingList);
             objectOutputStream.flush();
             objectOutputStream.close();
+            fileOutputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -65,6 +66,7 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             ShoppingList shoppingList = (ShoppingList) objectInputStream.readObject();
             objectInputStream.close();
+            fileInputStream.close();
             return shoppingList;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -77,34 +79,30 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
     }
 
     @Override
-    public ShoppingList[] getAll() {
+    public List<ShoppingList> getAll() {
         // todo: hashmap mit allen vorhandenen ShoppingLists erstellen und speichern
 
-        // nur zum mocken
-        ShoppingList[] shoppingLists = new ShoppingList[3];
-        List<ShoppingListItem> items = new ArrayList<>();
-        ShoppingListItem item = new ShoppingListItem("Item1");
-        items.add(item);
-        for (int i = 0; i < 3; i++) {
-            shoppingLists[i] = new ShoppingList(Integer.toString(i),"Liste" + i, items);
-        }
+        List<ShoppingList> shoppingLists = new ArrayList<>();
 
-//        try {
-//            for (int i = 0; i < ; i++) {
-//                Files.find()
-//            }
-//            FileInputStream fileInputStream = new FileInputStream(shoppingListPath + "shoppingList" + id + ".txt");
-//            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-//            ShoppingList shoppingList = (ShoppingList) objectInputStream.readObject();
-//            objectInputStream.close();
-//            return shoppingList;
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            File[] listOfFiles = Path.of(shoppingListPath).toFile().listFiles();
+            for (int i = 0; i < (listOfFiles != null ? listOfFiles.length : 0); i++) {
+                if (listOfFiles[i].isFile()) {
+                    FileInputStream fileInputStream = new FileInputStream(listOfFiles[i].getPath());
+                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                    ShoppingList shoppingList = (ShoppingList) objectInputStream.readObject();
+                    objectInputStream.close();
+                    fileInputStream.close();
+                    shoppingLists.add(shoppingList);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return shoppingLists;
     }
