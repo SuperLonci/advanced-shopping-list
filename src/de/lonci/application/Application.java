@@ -2,6 +2,7 @@ package de.lonci.application;
 
 import de.lonci.domain.Shop;
 import de.lonci.domain.ShoppingList;
+import de.lonci.domain.ShoppingListBuilder;
 import de.lonci.domain.ShoppingListItem;
 import de.lonci.plugins.repository.BinaryStreamShoppingListRepository;
 
@@ -33,7 +34,7 @@ public class Application {
         return shoppingListRepository;
     }
 
-    public ShoppingList getAdvancedShoppingList(){
+    public ShoppingList getShoppingList(){
         // todo: Aufteilung und Berechnung um in einem neuen Datenmodell eine "advanced" strukturierte Liste zu erhalten
         return null;
     }
@@ -47,7 +48,7 @@ public class Application {
     }
 
     public void createNewShoppingList(String name, List<ShoppingListItem> shoppingListItems){
-        ShoppingList shoppingList = new ShoppingList(generateId(name), name, shoppingListItems);
+        ShoppingList shoppingList = new ShoppingListBuilder(generateId(name)).name(name).shoppingListItems(shoppingListItems).build();
         shoppingListRepository.save(shoppingList);
     }
 

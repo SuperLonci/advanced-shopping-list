@@ -6,28 +6,36 @@ import java.util.List;
 public class ShoppingList implements Serializable {
     String id;
     String name;
-    private List<ShoppingListItem> items;
+    List<ShoppingListItem> shoppingListItems;
 
-    public ShoppingList(String id, String name, List<ShoppingListItem> items) {
-        this.id = id;
-        this.name = name;
-        this.items = items;
+    public ShoppingList(ShoppingListBuilder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.shoppingListItems = builder.shoppingListItems;
     }
 
-    public void append(ShoppingListItem item){
-        items.add(item);
-    }
-
-    public List<ShoppingListItem> getItems(){
-        return items;
-    }
-
-    public String getId(){
+    public String getId() {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
+    }
+
+    public List<ShoppingListItem> getShoppingListItems() {
+        return shoppingListItems;
+    }
+
+    public void addShoppingListItem(ShoppingListItem shoppingListItem){
+        shoppingListItems.add(shoppingListItem);
+    }
+
+    public String toString(){
+        String items = "";
+        for (ShoppingListItem shoppingListItem:shoppingListItems) {
+            items = items.concat(shoppingListItem.toString() + "\n");
+        }
+        return "Shop: " + this.id + " \n" + this.name + " \n" + items;
     }
 
 }
