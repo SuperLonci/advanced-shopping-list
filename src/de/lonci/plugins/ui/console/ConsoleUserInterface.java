@@ -84,8 +84,13 @@ public class ConsoleUserInterface implements UserInterface {
         for (int i = 0; i < (list.size()); i++) {
             System.out.println(i + ": " + list.get(i).getName());
         }
-        application.setActiveShoppingList(application.getShoppingListRepository().getById(list.get(input()).getId()));
-        System.out.println(application.getActiveShoppingList().getName() + " selected");
+        int selection = input();
+        if (selection > list.size() || list.size() == 0){
+            System.out.println("Liste nicht gefunden");
+        } else {
+            application.setActiveShoppingList(application.getShoppingListRepository().getById(list.get(selection).getId()));
+            System.out.println(application.getActiveShoppingList().getName() + " selected");
+        }
     }
 
     private void manageShoppingList(){
