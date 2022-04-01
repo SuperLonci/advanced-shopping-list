@@ -22,7 +22,7 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
     @Override
     public void delete(String id) {
         try {
-            Files.delete(Path.of(shoppingListPath + "shoppingList" + id + ".txt"));
+            Files.delete(Path.of(shoppingListPath + id + ".bin"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
         FileOutputStream fileOutputStream;
         ObjectOutputStream objectOutputStream;
 
-        String filePath = (shoppingListPath + "shoppingList" + shoppingList.getId() + ".txt");
+        String filePath = (shoppingListPath + shoppingList.getId() + ".bin");
         if (Files.notExists(Path.of(filePath))){
             File file = new File(filePath);
             try {
@@ -62,7 +62,7 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
     @Override
     public ShoppingList getById(String id) {
         try {
-            FileInputStream fileInputStream = new FileInputStream(shoppingListPath + "shoppingList" + id + ".txt");
+            FileInputStream fileInputStream = new FileInputStream(shoppingListPath + id + ".bin");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             ShoppingList shoppingList = (ShoppingList) objectInputStream.readObject();
             objectInputStream.close();
