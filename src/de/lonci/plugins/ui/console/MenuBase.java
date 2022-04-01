@@ -10,10 +10,15 @@ public abstract class MenuBase {
     private Map<String, MenuItem> menuItems = new HashMap<>();
     private List<MenuItem> menuItemsOrdered = new ArrayList<>();
     private String menuHeader;
+    protected boolean running = true;
 
 
     public MenuBase(Application application) {
         this.application = application;
+    }
+
+    public boolean isRunning(){
+        return running;
     }
 
     protected void addItem(MenuItem menuItem){
@@ -21,18 +26,25 @@ public abstract class MenuBase {
         menuItemsOrdered.add(menuItem);
     }
 
+    protected void clearItems(){
+        menuItems.clear();
+        menuItemsOrdered.clear();
+    }
+
     protected void setMenuHeader(String menuHeader) {
         this.menuHeader = menuHeader;
     }
 
     private void print(){
+        System.out.println("------------------------------");
         System.out.println(menuHeader);
         for (MenuItem menuItem : menuItemsOrdered){
             menuItem.print();
         }
+        System.out.println("------------------------------");
     }
 
-    private String receiveInput(){
+    protected String receiveInput(){
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }

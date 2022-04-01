@@ -1,28 +1,29 @@
 package de.lonci.plugins.ui.console.menus;
 
 import de.lonci.application.Application;
+import de.lonci.domain.Shop;
 import de.lonci.plugins.ui.console.MenuBase;
 import de.lonci.plugins.ui.console.MenuItem;
 
 public class MainMenu extends MenuBase {
 
-    private boolean running = true;
-
     public MainMenu(Application application) {
         super(application);
-
-        setMenuHeader("Please select an option: ");
-        addItem(new MenuItem("0", "Exit", this::exit));
-        addItem(new MenuItem("1", "Select a Shopping List", this::selectShoppingList));
-        addItem(new MenuItem("2", "Show selected Shopping List", this::exit));
-        addItem(new MenuItem("3", "Manage Shopping List", this::manageShoppingList));
-        addItem(new MenuItem("4", "Create a new Shopping List", this::exit));
-        addItem(new MenuItem("5", "List all shops", this::exit));
-
+        updateItems();
     }
 
-    public boolean isRunning(){
-        return running;
+    private void updateItems(){
+        clearItems();
+
+        setMenuHeader("Please select an option: ");
+        int menuItemNumber = 0;
+        addItem(new MenuItem(Integer.toString(menuItemNumber++), "Exit", this::exit));
+        addItem(new MenuItem(Integer.toString(menuItemNumber++), "Select a Shopping List", this::selectShoppingList));
+        if (application.getActiveShoppingList() != null) {
+            addItem(new MenuItem(Integer.toString(menuItemNumber++), "Manage Shopping List (" + application.getActiveShoppingList().getName() + ")", this::manageShoppingList));
+        }
+        addItem(new MenuItem(Integer.toString(menuItemNumber++), "Create a new Shopping List", this::createShoppingList));
+        addItem(new MenuItem(Integer.toString(menuItemNumber++), "List all shops", this::showShops));
     }
 
     private void exit(){
@@ -32,10 +33,27 @@ public class MainMenu extends MenuBase {
     private void selectShoppingList(){
         var menu = new ShoppingListSelectionMenu(application);
         menu.run();
+        updateItems();
     }
 
     private void manageShoppingList(){
         var menu = new ManageShoppingListMenu(application);
-        menu.run();
+        while (menu.isRunning()){
+            menu.run();
+            updateItems();
+        }
+    }
+
+    private void createShoppingList(){
+        System.out.println("Enter a name:");
+        String shoppingListName = receiveInput();
+        application.createNewShoppingList(shoppingListName);
+        System.out.println("New Shopping List created");
+    }
+
+    private void showShops(){
+        for (Shop shop : application.getDataProvider().getShops()) {
+            System.out.println(shop.getName());
+        }
     }
 }
