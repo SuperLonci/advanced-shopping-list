@@ -1,11 +1,12 @@
 package de.lonci.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingListBuilder {
     final String id;
     String name;
-    List<ShoppingListItem> shoppingListItems;
+    List<ShoppingListItem> shoppingListItems = new ArrayList<>();
 
     public ShoppingListBuilder(String id) {
         this.id = id;

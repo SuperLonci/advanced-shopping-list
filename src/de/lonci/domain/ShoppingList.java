@@ -30,6 +30,10 @@ public class ShoppingList implements Serializable {
         shoppingListItems.add(shoppingListItem);
     }
 
+    public void addProductToShoppingListItem(Product product, Integer shoppingListItemNumber){
+        shoppingListItems.get (shoppingListItemNumber).addProduct(product);
+    }
+
     public String toString(){
         String items = "";
         for (ShoppingListItem shoppingListItem:shoppingListItems) {
