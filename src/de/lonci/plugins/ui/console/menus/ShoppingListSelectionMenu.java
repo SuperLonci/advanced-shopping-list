@@ -29,6 +29,6 @@ public class ShoppingListSelectionMenu extends MenuBase {
     }
 
     private void exit(){
-
+        running = false;
     }
 }
