@@ -6,12 +6,12 @@ import java.util.List;
 public class ShoppingList implements Serializable {
     String id;
     String name;
-    List<ShoppingListItem> shoppingListItems;
+    List<ShoppingListStore> shoppingListStores;
 
     public ShoppingList(ShoppingListBuilder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.shoppingListItems = builder.shoppingListItems;
+        this.shoppingListStores = builder.shoppingListStores;
     }
 
     public String getId() {
@@ -22,22 +22,22 @@ public class ShoppingList implements Serializable {
         return name;
     }
 
-    public List<ShoppingListItem> getShoppingListItems() {
-        return shoppingListItems;
+    public List<ShoppingListStore> getShoppingListStores() {
+        return shoppingListStores;
     }
 
-    public void addShoppingListItem(ShoppingListItem shoppingListItem){
-        shoppingListItems.add(shoppingListItem);
+    public void addShoppingListStore(ShoppingListStore shoppingListStore){
+        shoppingListStores.add(shoppingListStore);
     }
 
-    public void addProductToShoppingListItem(Product product, Integer shoppingListItemNumber){
-        shoppingListItems.get (shoppingListItemNumber).addProduct(product);
+    public void addProductToShoppingListStore(Product product, Integer shoppingListItemNumber){
+        shoppingListStores.get (shoppingListItemNumber).addProduct(product);
     }
 
     public String toString(){
         String items = "";
-        for (ShoppingListItem shoppingListItem:shoppingListItems) {
-            items = items.concat(shoppingListItem.toString() + "\n");
+        for (ShoppingListStore shoppingListStore : shoppingListStores) {
+            items = items.concat(shoppingListStore.toString() + "\n");
         }
         return "Shop: " + this.id + " \n" + this.name + " \n" + items;
     }

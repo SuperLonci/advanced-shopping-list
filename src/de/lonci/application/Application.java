@@ -1,13 +1,9 @@
 package de.lonci.application;
 
 import de.lonci.domain.*;
-import de.lonci.plugins.repository.BinaryStreamShoppingListRepository;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Application {
@@ -45,17 +41,32 @@ public class Application {
     }
 
     public List<Product> matchProduct(String userInput){
-        return Arrays.stream(dataProvider.getProducts()).filter(product -> product.getName().toLowerCase().contains(userInput.toLowerCase())).collect(Collectors.toList());
+        return Arrays.stream(dataProvider.getProducts()).filter(product -> product.getType().toLowerCase().contains(userInput.toLowerCase())).collect(Collectors.toList());
     }
 
-    public void addProductToShoppingList(Product product){
-        for (ShoppingListItem item: activeShoppingList.getShoppingListItems()) {
-            for (Product chainProduct: item.getShop().getChain().getProducts()) {
-                if (product.getId().equals(chainProduct.getId())){
-                    activeShoppingList.addProductToShoppingListItem(product, activeShoppingList.getShoppingListItems().indexOf(item));
+    public boolean tryAddProductToShoppingList(Product product) {
+        for (ShoppingListStore item : activeShoppingList.getShoppingListStores()) {
+            for (Product chainProduct : item.getShop().getChain().getProducts()) {
+                if (product.getId().equals(chainProduct.getId())) {
+                    activeShoppingList.addProductToShoppingListStore(product, activeShoppingList.getShoppingListStores().indexOf(item));
+                    System.out.printf("Product %s found in %s%n", product.getName(), item.getShop().getName());
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    public List<Chain> getChainsOfferingProduct(Product product){
+        return Arrays.stream(dataProvider.getChains()).filter(chain -> Arrays.stream(chain.getProducts()).anyMatch(p -> p == product)).collect(Collectors.toList());
+    }
+
+    public void addShoppingListStore(Shop shop){
+        activeShoppingList.addShoppingListStore(new ShoppingListStoreBuilder().shop(shop).build());
+    }
+
+    public List<Shop> getShopsFromChain(Chain chain){
+        return Arrays.stream(dataProvider.getShops()).filter(shop -> shop.getChain() == chain).collect(Collectors.toList());
     }
 
     public void setActiveShoppingList(ShoppingList activeShoppingList) {

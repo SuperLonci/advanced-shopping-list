@@ -3,20 +3,14 @@ package de.lonci.domain;
 import java.io.Serializable;
 import java.util.List;
 
-public class ShoppingListItem implements Serializable {
+public class ShoppingListStore implements Serializable {
 
-    String id;
     Shop shop;
     List<Product> products;
 
-    public ShoppingListItem(ShoppingListItemBuilder builder) {
-        this.id = builder.id;
+    public ShoppingListStore(ShoppingListStoreBuilder builder) {
         this.shop = builder.shop;
         this.products = builder.products;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public Shop getShop() {
@@ -36,6 +30,6 @@ public class ShoppingListItem implements Serializable {
         for (Product product:products) {
             items = items.concat(product.toString() + "\n");
         }
-        return "Shop: " + this.id + " \n" + this.shop + " \n" + items;
+        return "Items: " + " \n" + this.shop + " \n" + items;
     }
 }

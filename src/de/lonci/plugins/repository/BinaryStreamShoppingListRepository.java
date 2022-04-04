@@ -1,9 +1,7 @@
 package de.lonci.plugins.repository;
 
 import de.lonci.application.ShoppingListRepository;
-import de.lonci.domain.Product;
 import de.lonci.domain.ShoppingList;
-import de.lonci.domain.ShoppingListItem;
 
 import java.io.*;
 import java.nio.file.Files;

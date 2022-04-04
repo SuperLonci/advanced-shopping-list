@@ -6,7 +6,7 @@ import java.util.List;
 public class ShoppingListBuilder {
     final String id;
     String name;
-    List<ShoppingListItem> shoppingListItems = new ArrayList<>();
+    List<ShoppingListStore> shoppingListStores = new ArrayList<>();
 
     public ShoppingListBuilder(String id) {
         this.id = id;
@@ -17,8 +17,8 @@ public class ShoppingListBuilder {
         return this;
     }
 
-    public ShoppingListBuilder shoppingListItems(List<ShoppingListItem> shoppingListItems) {
-        this.shoppingListItems = shoppingListItems;
+    public ShoppingListBuilder shoppingListItems(List<ShoppingListStore> shoppingListStores) {
+        this.shoppingListStores = shoppingListStores;
         return this;
     }
 
