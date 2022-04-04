@@ -2,13 +2,16 @@
     <product>
         <id>KARTOFFELN_LOKAL</id>
         <name>Kartoffeln Lokal</name>
+        <type>kartoffeln</type>
     </product>
     <product>
         <id>WEIHENSTEFFAN_MILCH_1L_FETTARM</id>
         <name>Weihensteffan Milch 1l fettarm</name>
+        <type>milch</type>
     </product>
     <product>
         <id>REWE_BESTE_WAHL_PFEFFERONEN</id>
         <name>Rewe Beste Wahl Pfeffeeronen</name>
+        <type>pfefferonen</type>
     </product>
 </products>

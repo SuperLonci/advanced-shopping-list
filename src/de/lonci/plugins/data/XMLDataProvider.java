@@ -66,7 +66,12 @@ public class XMLDataProvider implements DataProvider {
                         .item(0)
                         .getTextContent();
 
-                products[i] = new ProductBuilder(id).name(name).build();
+                String type = eElement
+                        .getElementsByTagName("type")
+                        .item(0)
+                        .getTextContent();
+
+                products[i] = new ProductBuilder(id).name(name).type(type).build();
                 productHashMap.put(id,products[i]);
             }
         }
