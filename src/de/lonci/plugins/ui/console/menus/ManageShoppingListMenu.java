@@ -1,8 +1,9 @@
 package de.lonci.plugins.ui.console.menus;
 
 import de.lonci.application.Application;
+import de.lonci.domain.Chain;
 import de.lonci.domain.Product;
-import de.lonci.plugins.ui.console.ConsoleUserInterface;
+import de.lonci.domain.Shop;
 import de.lonci.plugins.ui.console.MenuBase;
 import de.lonci.plugins.ui.console.MenuItem;
 
@@ -25,17 +26,35 @@ public class ManageShoppingListMenu extends MenuBase {
 
     private void showList(){
         System.out.println("List: " + application.getActiveShoppingList().getName());
-        application.getActiveShoppingList().toString();
+        System.out.println(application.getActiveShoppingList());
     }
 
     private void addProduct(){
         System.out.println("Enter a product: ");
-        var menu = new ProductSelectionMenu(application, application.matchProduct(receiveInput()));
-        menu.run();
+        var productMenu = new ObjectSelectionMenu<Product>(application, application.matchProduct(receiveInput()));
+        productMenu.run();
 
-        if (menu.selection != null){
-            application.addProductToShoppingList(menu.selection);
-            System.out.println(menu.selection.getName() + " selected");
+        if (productMenu.selection != null){
+            if (!application.tryAddProductToShoppingList(productMenu.selection)){
+                var chains = application.getChainsOfferingProduct(productMenu.selection);
+                if (chains.isEmpty()){
+                    System.out.println("No stores offering this product found.");
+                } else{
+                    var chainMenu = new ObjectSelectionMenu<Chain>(application, chains);
+                    chainMenu.run();
+                    var shops = application.getShopsFromChain(chainMenu.selection);
+                    if (shops.isEmpty()){
+                        System.out.println("No store found.");
+                    } else if (shops.size() == 1){
+                        application.addShoppingListStore(shops.get(0));
+                    } else {
+                        var storeMenu = new ObjectSelectionMenu<Shop>(application, shops);
+                        storeMenu.run();
+                        application.addShoppingListStore(storeMenu.selection);
+                    }
+                }
+            }
+            System.out.println(productMenu.selection.getName() + " added");
         } else {
             System.out.println("No product found");
         }

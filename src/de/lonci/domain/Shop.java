@@ -1,6 +1,6 @@
 package de.lonci.domain;
 
-public class Shop {
+public class Shop implements Displayable{
     final String id;
     String name;
     Chain chain;
@@ -37,5 +37,10 @@ public class Shop {
 
     public String toString(){
         return "Shop: " + this.id + ", " + this.name + ", " + this.chain + ", " + this.address + ", " + this.priority;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
     }
 }

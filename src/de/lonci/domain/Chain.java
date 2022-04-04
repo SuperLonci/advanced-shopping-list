@@ -3,7 +3,7 @@ package de.lonci.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Chain {
+public class Chain implements Displayable {
     final String id;
     String name;
     Product[] products;
@@ -33,5 +33,10 @@ public class Chain {
             productList.add(product.getName());
         }
         return "Chain: " + this.id + ", " + this.name + ", Products: " + String.join(", ", productList);
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
     }
 }
