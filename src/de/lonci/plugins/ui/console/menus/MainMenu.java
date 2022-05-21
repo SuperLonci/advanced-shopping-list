@@ -2,6 +2,7 @@ package de.lonci.plugins.ui.console.menus;
 
 import de.lonci.application.Application;
 import de.lonci.domain.Shop;
+import de.lonci.domain.ShoppingList;
 import de.lonci.plugins.ui.console.MenuBase;
 import de.lonci.plugins.ui.console.MenuItem;
 
@@ -31,8 +32,13 @@ public class MainMenu extends MenuBase {
     }
 
     private void selectShoppingList(){
-        var menu = new ShoppingListSelectionMenu(application);
+        var menu = new ObjectSelectionMenu<ShoppingList>(application, application.getShoppingListRepository().getAll());
         menu.run();
+        if (menu.selection == null){
+            return;
+        }
+        application.setActiveShoppingList(menu.selection);
+        System.out.println(application.getActiveShoppingList().getName() + " selected");
         updateItems();
     }
 

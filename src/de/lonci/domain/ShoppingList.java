@@ -3,7 +3,7 @@ package de.lonci.domain;
 import java.io.Serializable;
 import java.util.List;
 
-public class ShoppingList implements Serializable {
+public class ShoppingList implements Serializable, Displayable{
     String id;
     String name;
     List<ShoppingListStore> shoppingListStores;
@@ -42,4 +42,8 @@ public class ShoppingList implements Serializable {
         return "Shop: " + this.id + " \n" + this.name + " \n" + items;
     }
 
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
 }

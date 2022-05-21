@@ -44,6 +44,7 @@ public class Application {
         return Arrays.stream(dataProvider.getProducts()).filter(product -> product.getType().toLowerCase().contains(userInput.toLowerCase())).collect(Collectors.toList());
     }
 
+    // if product is found in Stores in Shopping List the product is added and true is returned
     public boolean tryAddProductToShoppingList(Product product) {
         for (ShoppingListStore item : activeShoppingList.getShoppingListStores()) {
             for (Product chainProduct : item.getShop().getChain().getProducts()) {
