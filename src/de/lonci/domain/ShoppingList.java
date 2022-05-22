@@ -42,6 +42,10 @@ public class ShoppingList implements Serializable, Displayable{
         return removed;
     }
 
+    public boolean removeShoppingListStore(ShoppingListStore shoppingListStore){
+        return shoppingListStores.remove(shoppingListStore);
+    }
+
     public String toString(){
         return "ShoppingList: " + this.name;
     }

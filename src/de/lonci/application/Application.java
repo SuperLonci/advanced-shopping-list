@@ -71,9 +71,16 @@ public class Application {
         return removed;
     }
 
-    public void addShoppingListStore(Shop shop){
-        activeShoppingList.addShoppingListStore(new ShoppingListStoreBuilder().shop(shop).build());
+    public ShoppingListStore getOrAddShoppingListStore(Shop shop){
+        var existingStore = activeShoppingList.getShoppingListStores().stream().filter(store -> store.getShop().equals(shop)).findAny();
+        if (existingStore.isPresent()){
+            return existingStore.get();
+        }
+
+        var store = new ShoppingListStoreBuilder().shop(shop).build();
+        activeShoppingList.addShoppingListStore(store);
         saveShoppingList(activeShoppingList);
+        return store;
     }
 
     public List<Shop> getShopsFromChain(Chain chain){
@@ -88,6 +95,16 @@ public class Application {
         ShoppingList shoppingList = new ShoppingListBuilder(generateId(name)).name(name).build();
         saveShoppingList(shoppingList);
         setActiveShoppingList(shoppingList);
+    }
+
+    public void removeEmptyShoppingListStores(){
+        for (int i = activeShoppingList.getShoppingListStores().size() - 1; i >= 0; i--) {
+            var shoppingListStore = activeShoppingList.getShoppingListStores().get(i);
+            if (shoppingListStore.getProducts().isEmpty()){
+                activeShoppingList.removeShoppingListStore(shoppingListStore);
+            }
+        }
+        saveShoppingList(activeShoppingList);
     }
 
     public void saveShoppingList(ShoppingList shoppingList){

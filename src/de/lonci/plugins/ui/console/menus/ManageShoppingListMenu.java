@@ -9,7 +9,6 @@ import de.lonci.plugins.ui.console.MenuBase;
 import de.lonci.plugins.ui.console.MenuItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ManageShoppingListMenu extends MenuBase {
     public ManageShoppingListMenu(Application application) {
@@ -20,7 +19,7 @@ public class ManageShoppingListMenu extends MenuBase {
         addItem(new MenuItem("1", "Show List", this::showList));
         addItem(new MenuItem("2", "Add a product", this::addProduct));
         addItem(new MenuItem("3", "Remove a product", this::removeProduct));
-        addItem(new MenuItem("4", "Change store for product", this::exit));
+        addItem(new MenuItem("4", "Change store for product", this::changeStoreForProduct));
     }
 
     private void exit(){
@@ -57,42 +56,44 @@ public class ManageShoppingListMenu extends MenuBase {
             return;
         }
 
-        var chains = application.getChainsOfferingProduct(productMenu.selection);
-        if (chains.isEmpty()){
-            System.out.println("No stores offering this product found.");
-            return;
-        }
+//        var chains = application.getChainsOfferingProduct(productMenu.selection);
+//        if (chains.isEmpty()){
+//            System.out.println("No stores offering this product found.");
+//            return;
+//        }
+//
+//        var chainMenu = new ObjectSelectionMenu<Chain>(application, chains);
+//        chainMenu.run();
+//        var shops = application.getShopsFromChain(chainMenu.selection);
+//        if (shops.isEmpty()){
+//            System.out.println("No store found.");
+//            return;
+//        }
+//        if (shops.size() == 1){
+//            application.addShoppingListStore(shops.get(0));
+//        } else {
+//            var storeMenu = new ObjectSelectionMenu<Shop>(application, shops);
+//            storeMenu.run();
+//            application.addShoppingListStore(storeMenu.selection);
+//        }
 
-        var chainMenu = new ObjectSelectionMenu<Chain>(application, chains);
-        chainMenu.run();
-        var shops = application.getShopsFromChain(chainMenu.selection);
-        if (shops.isEmpty()){
-            System.out.println("No store found.");
-            return;
-        }
-        if (shops.size() == 1){
-            application.addShoppingListStore(shops.get(0));
-        } else {
-            var storeMenu = new ObjectSelectionMenu<Shop>(application, shops);
-            storeMenu.run();
-            application.addShoppingListStore(storeMenu.selection);
-        }
-        if (application.tryAddProductToShoppingList(productMenu.selection)){
+        ShoppingListStore store = selectStoreForProduct(productMenu.selection);
 
-            System.out.println(productMenu.selection.getDisplayName() + " added");
-        }
+        application.getActiveShoppingList().addProductToShoppingListStore(productMenu.selection, application.getActiveShoppingList().getShoppingListStores().indexOf(store));
+        application.saveShoppingList(application.getActiveShoppingList());
+
+        System.out.println(productMenu.selection.getDisplayName() + " added");
     }
 
-    private void removeProduct(){
+    private Product selectProduct(){
         var products = new ArrayList<Product>();
-        System.out.println("Enter a product to remove: ");
         for (ShoppingListStore shoppingListStore: application.getActiveShoppingList().getShoppingListStores()) {
             products.addAll(shoppingListStore.getProducts());
         }
 
         if (products.isEmpty()){
             System.out.println("No product found");
-            return;
+            return null;
         }
 
         var menu = new ObjectSelectionMenu<Product>(application, products);
@@ -100,14 +101,69 @@ public class ManageShoppingListMenu extends MenuBase {
 
         if (menu.selection == null) {
             System.out.println("No product selected");
-            return;
+            return null;
+        }
+        return menu.selection;
+    }
+
+    private ShoppingListStore selectStoreForProduct(Product product){
+        var chains = application.getChainsOfferingProduct(product);
+        if (chains.isEmpty()){
+            System.out.println("No stores offering this product found.");
+            return null;
         }
 
-        if (application.removeProductFromShoppingList(menu.selection)) {
-            System.out.println(menu.selection.getName() + " removed");
-            return;
+        var chainMenu = new ObjectSelectionMenu<Chain>(application, chains);
+        chainMenu.run();
+        var shops = application.getShopsFromChain(chainMenu.selection);
+        if (shops.isEmpty()){
+            System.out.println("No store found.");
+            return null;
+        }
+
+        if (shops.size() == 1){
+            return application.getOrAddShoppingListStore(shops.get(0));
+        } else {
+            var storeMenu = new ObjectSelectionMenu<Shop>(application, shops);
+            storeMenu.run();
+            return application.getOrAddShoppingListStore(storeMenu.selection);
         }
     }
 
+
+
+    private void removeProduct(){
+        System.out.println("Remove product:");
+
+        var selectedProduct = selectProduct();
+        if (selectedProduct == null){
+            return;
+        }
+
+        if (application.removeProductFromShoppingList(selectedProduct)) {
+            System.out.println(selectedProduct.getName() + " removed");
+            application.removeEmptyShoppingListStores();
+        }
+    }
+
+    private void changeStoreForProduct(){
+        System.out.println("Change Store:");
+
+        var selectedProduct = selectProduct();
+        if (selectedProduct == null){
+            return;
+        }
+
+        if (!application.removeProductFromShoppingList(selectedProduct)) {
+            return;
+        }
+
+        ShoppingListStore store = selectStoreForProduct(selectedProduct);
+
+        application.getActiveShoppingList().addProductToShoppingListStore(selectedProduct, application.getActiveShoppingList().getShoppingListStores().indexOf(store));
+        application.saveShoppingList(application.getActiveShoppingList());
+        System.out.println(selectedProduct.getDisplayName() + " changed to " + store.getShop().getDisplayName());
+        application.removeEmptyShoppingListStores();
+    }
 }
 
