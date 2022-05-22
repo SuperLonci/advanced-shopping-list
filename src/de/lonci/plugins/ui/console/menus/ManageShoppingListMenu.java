@@ -4,8 +4,12 @@ import de.lonci.application.Application;
 import de.lonci.domain.Chain;
 import de.lonci.domain.Product;
 import de.lonci.domain.Shop;
+import de.lonci.domain.ShoppingListStore;
 import de.lonci.plugins.ui.console.MenuBase;
 import de.lonci.plugins.ui.console.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManageShoppingListMenu extends MenuBase {
     public ManageShoppingListMenu(Application application) {
@@ -15,9 +19,8 @@ public class ManageShoppingListMenu extends MenuBase {
         addItem(new MenuItem("0", "Exit", this::exit));
         addItem(new MenuItem("1", "Show List", this::showList));
         addItem(new MenuItem("2", "Add a product", this::addProduct));
-        addItem(new MenuItem("3", "Remove a product", this::exit));
+        addItem(new MenuItem("3", "Remove a product", this::removeProduct));
         addItem(new MenuItem("4", "Change store for product", this::exit));
-        addItem(new MenuItem("5", "List all products", this::exit));
     }
 
     private void exit(){
@@ -26,7 +29,12 @@ public class ManageShoppingListMenu extends MenuBase {
 
     private void showList(){
         System.out.println("List: " + application.getActiveShoppingList().getName());
-        System.out.println(application.getActiveShoppingList());
+        for (ShoppingListStore shoppingListStore: application.getActiveShoppingList().getShoppingListStores()) {
+            System.out.println("Store: " + shoppingListStore.getShop().getDisplayName());
+            for (Product product: shoppingListStore.getProducts()) {
+                System.out.println("    - " + product.getDisplayName());
+            }
+        }
     }
 
     private void addProduct(){
@@ -64,12 +72,42 @@ public class ManageShoppingListMenu extends MenuBase {
         }
         if (shops.size() == 1){
             application.addShoppingListStore(shops.get(0));
+        } else {
+            var storeMenu = new ObjectSelectionMenu<Shop>(application, shops);
+            storeMenu.run();
+            application.addShoppingListStore(storeMenu.selection);
+        }
+        if (application.tryAddProductToShoppingList(productMenu.selection)){
+
+            System.out.println(productMenu.selection.getDisplayName() + " added");
+        }
+    }
+
+    private void removeProduct(){
+        var products = new ArrayList<Product>();
+        System.out.println("Enter a product to remove: ");
+        for (ShoppingListStore shoppingListStore: application.getActiveShoppingList().getShoppingListStores()) {
+            products.addAll(shoppingListStore.getProducts());
+        }
+
+        if (products.isEmpty()){
+            System.out.println("No product found");
             return;
         }
-        var storeMenu = new ObjectSelectionMenu<Shop>(application, shops);
-        storeMenu.run();
-        application.addShoppingListStore(storeMenu.selection);
-        System.out.println(productMenu.selection.getName() + " added");
+
+        var menu = new ObjectSelectionMenu<Product>(application, products);
+        menu.run();
+
+        if (menu.selection == null) {
+            System.out.println("No product selected");
+            return;
+        }
+
+        if (application.removeProductFromShoppingList(menu.selection)) {
+            System.out.println(menu.selection.getName() + " removed");
+            return;
+        }
     }
+
 }
 
