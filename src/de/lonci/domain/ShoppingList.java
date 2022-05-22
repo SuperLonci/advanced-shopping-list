@@ -31,15 +31,19 @@ public class ShoppingList implements Serializable, Displayable{
     }
 
     public void addProductToShoppingListStore(Product product, Integer shoppingListItemNumber){
-        shoppingListStores.get (shoppingListItemNumber).addProduct(product);
+        shoppingListStores.get(shoppingListItemNumber).addProduct(product);
+    }
+
+    public boolean removeProductFromList(Product product){
+        boolean removed = false;
+        for (ShoppingListStore shoppingListStore: shoppingListStores) {
+            removed |= shoppingListStore.removeProduct(product);
+        }
+        return removed;
     }
 
     public String toString(){
-        String items = "";
-        for (ShoppingListStore shoppingListStore : shoppingListStores) {
-            items = items.concat(shoppingListStore.toString() + "\n");
-        }
-        return "Shop: " + this.id + " \n" + this.name + " \n" + items;
+        return "ShoppingList: " + this.name;
     }
 
     @Override

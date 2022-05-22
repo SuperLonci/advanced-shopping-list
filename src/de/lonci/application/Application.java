@@ -51,6 +51,7 @@ public class Application {
                 if (product.getId().equals(chainProduct.getId())) {
                     activeShoppingList.addProductToShoppingListStore(product, activeShoppingList.getShoppingListStores().indexOf(item));
                     System.out.printf("Product %s found in %s%n", product.getName(), item.getShop().getName());
+                    saveShoppingList(activeShoppingList);
                     return true;
                 }
             }
@@ -62,8 +63,17 @@ public class Application {
         return Arrays.stream(dataProvider.getChains()).filter(chain -> Arrays.stream(chain.getProducts()).anyMatch(p -> p == product)).collect(Collectors.toList());
     }
 
+    public boolean removeProductFromShoppingList(Product product){
+        boolean removed = activeShoppingList.removeProductFromList(product);
+        if (removed){
+            saveShoppingList(activeShoppingList);
+        }
+        return removed;
+    }
+
     public void addShoppingListStore(Shop shop){
         activeShoppingList.addShoppingListStore(new ShoppingListStoreBuilder().shop(shop).build());
+        saveShoppingList(activeShoppingList);
     }
 
     public List<Shop> getShopsFromChain(Chain chain){
@@ -76,8 +86,12 @@ public class Application {
 
     public void createNewShoppingList(String name){
         ShoppingList shoppingList = new ShoppingListBuilder(generateId(name)).name(name).build();
-        shoppingListRepository.save(shoppingList);
+        saveShoppingList(shoppingList);
         setActiveShoppingList(shoppingList);
+    }
+
+    public void saveShoppingList(ShoppingList shoppingList){
+        shoppingListRepository.save(shoppingList);
     }
 
     private String generateId(String name){

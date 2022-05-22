@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         var xmlDataProvider = new XMLDataProvider("./data/");
         var consoleUserInterface = new ConsoleUserInterface();
-        var shoppingListRepository = new BinaryStreamShoppingListRepository("./data/shoppinglists/");
+        var shoppingListRepository = new BinaryStreamShoppingListRepository("./data/shoppinglists/", xmlDataProvider);
         Application application = new Application(xmlDataProvider,consoleUserInterface, shoppingListRepository);
         application.start();
 

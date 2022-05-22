@@ -1,7 +1,9 @@
 package de.lonci.plugins.repository;
 
+import de.lonci.application.DataProvider;
 import de.lonci.application.ShoppingListRepository;
 import de.lonci.domain.ShoppingList;
+import de.lonci.domain.ShoppingListStore;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,9 +14,11 @@ import java.util.List;
 public class BinaryStreamShoppingListRepository implements ShoppingListRepository {
 
     String shoppingListPath;
+    DataProvider dataProvider;
 
-    public BinaryStreamShoppingListRepository(String shoppingListPath){
+    public BinaryStreamShoppingListRepository(String shoppingListPath, DataProvider dataProvider){
         this.shoppingListPath = shoppingListPath;
+        this.dataProvider = dataProvider;
     }
 
     @Override
@@ -59,12 +63,37 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
 
     @Override
     public ShoppingList getById(String id) {
+        return loadFromPath(shoppingListPath + id + ".bin");
+    }
+
+    @Override
+    public List<ShoppingList> getAll() {
+        // todo: hashmap mit allen vorhandenen ShoppingLists erstellen und speichern
+
+        List<ShoppingList> shoppingLists = new ArrayList<>();
+
+        File[] listOfFiles = Path.of(shoppingListPath).toFile().listFiles();
+        for (int i = 0; i < (listOfFiles != null ? listOfFiles.length : 0); i++) {
+            if (listOfFiles[i].isFile()) {
+                var shoppingList = loadFromPath(listOfFiles[i].getPath());
+                shoppingLists.add(shoppingList);
+            }
+        }
+        return shoppingLists;
+    }
+
+    public ShoppingList loadFromPath(String path){
         try {
-            FileInputStream fileInputStream = new FileInputStream(shoppingListPath + id + ".bin");
+            FileInputStream fileInputStream = new FileInputStream(path);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             ShoppingList shoppingList = (ShoppingList) objectInputStream.readObject();
             objectInputStream.close();
             fileInputStream.close();
+
+            for (ShoppingListStore shoppingListStore : shoppingList.getShoppingListStores()) {
+                shoppingListStore.loadReferencedData(dataProvider);
+            }
+
             return shoppingList;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -74,34 +103,5 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
             e.printStackTrace();
         }
         return null;
-    }
-
-    @Override
-    public List<ShoppingList> getAll() {
-        // todo: hashmap mit allen vorhandenen ShoppingLists erstellen und speichern
-
-        List<ShoppingList> shoppingLists = new ArrayList<>();
-
-        try {
-            File[] listOfFiles = Path.of(shoppingListPath).toFile().listFiles();
-            for (int i = 0; i < (listOfFiles != null ? listOfFiles.length : 0); i++) {
-                if (listOfFiles[i].isFile()) {
-                    FileInputStream fileInputStream = new FileInputStream(listOfFiles[i].getPath());
-                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                    ShoppingList shoppingList = (ShoppingList) objectInputStream.readObject();
-                    objectInputStream.close();
-                    fileInputStream.close();
-                    shoppingLists.add(shoppingList);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return shoppingLists;
     }
 }
