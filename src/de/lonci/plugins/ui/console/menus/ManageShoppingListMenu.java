@@ -56,27 +56,6 @@ public class ManageShoppingListMenu extends MenuBase {
             return;
         }
 
-//        var chains = application.getChainsOfferingProduct(productMenu.selection);
-//        if (chains.isEmpty()){
-//            System.out.println("No stores offering this product found.");
-//            return;
-//        }
-//
-//        var chainMenu = new ObjectSelectionMenu<Chain>(application, chains);
-//        chainMenu.run();
-//        var shops = application.getShopsFromChain(chainMenu.selection);
-//        if (shops.isEmpty()){
-//            System.out.println("No store found.");
-//            return;
-//        }
-//        if (shops.size() == 1){
-//            application.addShoppingListStore(shops.get(0));
-//        } else {
-//            var storeMenu = new ObjectSelectionMenu<Shop>(application, shops);
-//            storeMenu.run();
-//            application.addShoppingListStore(storeMenu.selection);
-//        }
-
         ShoppingListStore store = selectStoreForProduct(productMenu.selection);
 
         application.getActiveShoppingList().addProductToShoppingListStore(productMenu.selection, application.getActiveShoppingList().getShoppingListStores().indexOf(store));

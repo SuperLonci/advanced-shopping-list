@@ -22,6 +22,10 @@ public class ShoppingList implements Serializable, Displayable{
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<ShoppingListStore> getShoppingListStores() {
         return shoppingListStores;
     }
