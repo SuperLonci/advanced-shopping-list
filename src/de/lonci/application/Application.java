@@ -4,6 +4,7 @@ import de.lonci.domain.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Application {
@@ -92,7 +93,7 @@ public class Application {
     }
 
     public void createNewShoppingList(String name){
-        ShoppingList shoppingList = new ShoppingListBuilder(generateId(name)).name(name).build();
+        ShoppingList shoppingList = new ShoppingListBuilder(generateId()).name(name).build();
         saveShoppingList(shoppingList);
         setActiveShoppingList(shoppingList);
     }
@@ -111,9 +112,7 @@ public class Application {
         shoppingListRepository.save(shoppingList);
     }
 
-    private String generateId(String name){
-        // todo do some magic
-        return name;
+    private String generateId(){
+        return UUID.randomUUID().toString();
     }
-
 }
