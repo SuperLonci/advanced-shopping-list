@@ -30,7 +30,7 @@ Workflow:
 
     bereits eine Einkaufsliste existiert:
     - Einkaufsliste auswählen
-    
+
     noch keine Einkaufsliste existiert:
     - Einkaufsliste erstellen und auswählen
 
