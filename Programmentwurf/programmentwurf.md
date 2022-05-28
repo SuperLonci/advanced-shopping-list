@@ -231,21 +231,119 @@ public class ObjectSelectionMenu<T extends Displayable> extends MenuBase {
 
 ## 10 Unit Tests
 [Nennung von 10 Unit-Tests und Beschreibung, was getestet wird]
-| Unit Test         | Beschreibung  |
-| ---               | ---           |
-| Klasse#Methode    | ne brudi      |
+| Unit Test                     | Beschreibung                                              |
+| ---                           | ---                                                       |
+| testCreateShoppingList        | Erstellen einer ShoppingList                              |
+| testDeleteShoppingList        | Löschen einer ShoppingList                                |
+| testFindProductWithQuery      | Suchen von Produkten mit Suchbegriff                      |
+| testAddProductWithoutStore    | Produkt hinzufügen ohne, dass bereits ein Store existiert |
+| testAddProductWithStore       | Produkt hinzufügen wenn bereits ein Store existiert       |
+| testRemoveEmptyStores         | Leere Stores automatisch löschen                          |
+| testGetOrAddStore             | Abfragen von Stores mit automatischem Hinzufügen          |
+| testShopsFromChain            | Alle Shops einer Kette abfragen                           |
+| testRemoveProduct             | Produkt aus ShoppingList entfernen                        |
+| testChainsOfferingProduct     | Alle Ketten, die ein Produkt anbieten, abfragen           |
 
 
 ## ATRIP: Automatic
-[Begründung/Erläuterung, wie ‘Automatic’ realisiert wurde]
+Die Tests wurden mithilfe des JUnit Frameworks realisiert, wodurch diese automatisch ausgeführt werden.
+Die Tests benötigen außerdem keinerlei User-Input.
 ## ATRIP: Thorough
-[jeweils 1 positives und negatives Beispiel zu ‘Thorough’; jeweils Code-Beispiel, Analyse und Begründung, was professionell/nicht professionell ist]
+### Positiv-Beispiel:
+```Java
+@Test
+public void testCreateShoppingList() {
+    // Arrange
+    repository.clear();
+    var name = "Test Shopping List";
+
+    // Act
+    application.createNewShoppingList(name);
+
+    // Assert
+    assertEquals(1, repository.getAll().size());
+    assertEquals(name, repository.getAll().get(0).getName());
+}
+
+@Test
+public void testDeleteShoppingList() {
+    // Arrange
+    repository.clear();
+    repository.save(new ShoppingListBuilder("test").build());
+
+    // Act
+    application.deleteShoppingList("test");
+
+    // Assert
+    assertEquals(0, repository.getAll().size());
+}
+```
+Diese Tests sind thorough, da sie den Hauptanwendungsfall der Anwendung abdecken. Das Erstellen und Löschen von ShoppingLists ist für jeden Nutzer wichtig, weshalb beide Funktionen ausführlich getestet werden.
+
+### Negativ-Beispiel
+
+```Java
+@Test
+public void testFindProductWithQuery() {
+    // Arrange
+    var query = "toff";
+
+    // Act
+    var result = application.matchProduct(query);
+
+    // Assert
+    assertEquals(1, result.size());
+}
+```
+Dieser Test ist nicht sehr gründlich, da hier nur ein Anwendungsfall der Produktsuche getestet wird. Es wird allerdings nicht getestet, was bei einer leeren Suchanfrage passiert, oder wenn mehrere Produkte gesucht werden.
+
 ## ATRIP: Professional
-[jeweils 1 positives und negatives Beispiel zu ‘Professional’; jeweils Code-Beispiel, Analyse und Begründung, was professionell/nicht professionell ist]
+### Positiv-Beispiel
+```Java
+@Test
+public void testCreateShoppingList() {
+    // Arrange
+    repository.clear();
+    var name = "Test Shopping List";
+
+    // Act
+    application.createNewShoppingList(name);
+
+    // Assert
+    assertEquals(1, repository.getAll().size());
+    assertEquals(name, repository.getAll().get(0).getName());
+}
+```
+Dieser Test ist sehr leicht verständlich und durch die Arrange-Act-Assert Struktur klar strukturiert. Fehler sind in diesem Test leicht zu finden und zu beheben.
+### Negativ-Beispiel
+```Java
+@Test
+public void testGetOrAddStore() {
+    // Arrange
+    var shoppingList = application.createNewShoppingList("TestGetAddStore");
+
+    // Act
+    assertEquals(0, shoppingList.getShoppingListStores().size());
+
+    var store = application.getOrAddShoppingListStore(dataProvider.getShops()[0]);
+
+    assertEquals(1, shoppingList.getShoppingListStores().size());
+    assertEquals(store.getShop(), dataProvider.getShops()[0]);
+}
+```
+Dieser Test ist relativ kompliziert. Die Arrange-Act-Assert Struktur ist hier durcheinander gekommen, da zwischen den Assertions nochmal ein Methodenaufruf passiert. Die Assertions selbst sind schwer verständlich, da keine sprechenden Variablennamen existieren, die aussagen, was genau überprüft wird. Besser wäre es, die Bedingungen auszulagern in temporäre Variablen.
 ## Code Coverage
-[Code Coverage im Projekt analysieren und begründen]
+<img src="./images/coverage.png">
+
+Die Line-Coverage im gesamten Projekt beträgt 26%, die Branch-Coverage 12%.
+Diese Werte sind relativ schlecht, allerdings liegt das daran, dass der größte Teil des Codes im UI-Plugin liegt. Dieses wurde nicht von Unit-Tests abgedeckt, da es sehr aufwändig wäre, den User-Input zu simulieren.
+Betrachtet man nur die Application und die Domain liegt die Line-Coverage bei 86% und 75%, was deutlich besser ist. Auch die Branch-Coverage in Application ist mit 72% vergleichsweise gut.
+
 ## Fakes und Mocks
-[Analyse und Begründung des Einsatzes von 2 Fake/Mock-Objekten; zusätzlich jeweils UML Diagramm der Klasse]
+
+TODO: UML-Diagramme für MockDataProvider und MockRepository
+
+Für die Durchführung der Tests wurden 2 Mock-Objekte erstellt: `MockDataProvider` und `MockRepository`. Der Data-Provider stellt verschiedene Produkte und Shops für die Tests zur Verfügung, ohne das dafür XML-Dateien eingelesen werden müssen. Das Repository stellt verwaltet die ShoppingLists, die während den Tests gebraucht werden, ohne diese auf die Festplatte zu persistieren. So können alle Tests ohne Abhängigkeiten von externen Faktoren durchgeführt werden.
 
 # Kapitel 6: Domain Driven Design
 ## Ubiquitous Language
@@ -569,6 +667,15 @@ private void removeProduct(){
 
 # Kapitel 8: Entwurfsmuster
 [2 unterschiedliche Entwurfsmuster aus der Vorlesung (oder nach Absprache auch andere) jeweils sinnvoll einsetzen, begründen und UML-Diagramm]
-## Entwurfsmuster: [Name]
-## Entwurfsmuster: [Name]
+
+## Entwurfsmuster: Builder-Pattern
+
+TODO: UML-Diagramm von Buildern
+
+Für das Erstellen der verschiedenen Entity-Klassen wurde das Builder-Pattern eingesetzt. Dafür hat jede Klasse eine weitere Klasse, die dessen Builder darstellt. Beispielsweise existiert für die `ShoppingList` Klasse, die Builder-Klasse `ShoppingListBuilder`. Mithilfe dieser Builder können leicht Parameter für das Erstellen von neuen Objekten hinzugefügt werden. Da Java keine optionalen Parameter unterstützt, müssten ohne das Builder-Pattern eigene Konstruktor-Methoden für jede Kombination von Parametern erstellt werden.
+
+## Entwurfsmuster: Mediator
  
+TODO: UML-Diagramm (Links: Alle Menüs, Mitte: Application, Rechts: DataProvider und Repository)
+
+Der grundlegende Aufbau der Anwendung folgt dem sogenannten Mediator-Pattern. Bei diesem Pattern läuft die Kommunikation zwischen den Objekten über einen zentralen Anlaufpunkt, sodass es keine Abhängigkeiten zwischen allen Objekten gibt, sondern lediglich mit dem Mediator-Objekt. In diesem Fall ist der Mediator die `Application`-Klasse. Die einzelnen Menüs greifen immer nur über diese Klasse auf die anderen Objekte, wie z.b. das Repository zu. Dadurch wird die genaue Implementierung der Funktionen versteckt und es gibt weniger Abhängigkeiten zwischen den Teilen der Anwendung.
