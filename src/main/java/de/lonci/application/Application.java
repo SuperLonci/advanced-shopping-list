@@ -92,10 +92,15 @@ public class Application {
         this.activeShoppingList = activeShoppingList;
     }
 
-    public void createNewShoppingList(String name){
+    public ShoppingList createNewShoppingList(String name){
         ShoppingList shoppingList = new ShoppingListBuilder(generateId()).name(name).build();
         saveShoppingList(shoppingList);
         setActiveShoppingList(shoppingList);
+        return shoppingList;
+    }
+
+    public void deleteShoppingList(String id) {
+        shoppingListRepository.delete(id);
     }
 
     public void removeEmptyShoppingListStores(){

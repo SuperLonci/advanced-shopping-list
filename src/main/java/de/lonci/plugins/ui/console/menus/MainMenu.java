@@ -86,7 +86,7 @@ public class MainMenu extends MenuBase {
             if (application.getActiveShoppingList() != null && application.getActiveShoppingList().getId().equals(selectedShoppingList.getId())){
                 application.setActiveShoppingList(null);
             }
-            application.getShoppingListRepository().delete(selectedShoppingList.getId());
+            application.deleteShoppingList(selectedShoppingList.getId());
             updateItems();
         }
     }
