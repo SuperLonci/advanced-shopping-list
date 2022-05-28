@@ -19,6 +19,16 @@ public class BinaryStreamShoppingListRepository implements ShoppingListRepositor
     public BinaryStreamShoppingListRepository(String shoppingListPath, DataProvider dataProvider){
         this.shoppingListPath = shoppingListPath;
         this.dataProvider = dataProvider;
+
+        // Create folder if it doesn't exist
+        Path path = new File(shoppingListPath).toPath();
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
