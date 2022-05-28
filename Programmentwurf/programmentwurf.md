@@ -10,7 +10,8 @@ Programmentwurf
 Einkaufsmanager
 
 Name: Gombar, Daniel
-Martrikelnummer: [MNR]
+
+Martrikelnummer: 6902907
 
 
 Abgabedatum: 29.05.2022
@@ -38,13 +39,49 @@ Allgemeine Anmerkungen:
 
 ## Übersicht über die Applikation
 [Was macht die Applikation? Wie funktioniert sie? Welches Problem löst sie/welchen Zweck hat sie?]
+
+[Github Repository](https://github.com/SuperLonci/advanced-shopping-list)
+
+Es handelt sich um die neuste und innovativste Erfindung in der Geschichte des Einkaufens. 
+Sie ermöglicht eine Zuteilung der benötigten Produkte auf die Geschäfte in denen man sie am liebsten erwerben möchte. 
+Darüber hinaus werden vervollständigte Eingaben vorgeschlagen. So muss man nur `Kart` eingeben um seine lokalen Lieblingskartoffeln vorgeschlagen zu bekommen. 
+Anschließen wird man vor die Auswahl gestellt in welcher Kette man das Produkt erwerben möchte, vorausgesetzt diese bietet es an.
+Sie löst das Problem einer unstrukturierten Einkaufsliste und dem Gefühl die ganze Zeit über Produkte der Einkaufliste "drüber" lesen zu müssen, da das Geschäft diese nicht anbietet.
+Gleichzeitig kann so mehr Wert auf lokale Produkte gelegt werden und der Lieblingsmetzger um die Ecke zum Fleischkauf gewählt werden.
+
+Workflow:
+1. Anwendung starten
+
+2. Wenn:
+
+    bereits eine Einkaufsliste existiert:
+    - Einkaufsliste auswählen
+
+    noch keine Einkaufsliste existiert:
+    - Einkaufsliste erstellen und auswählen
+
+3. Manage Shopping List wählen
+4. Produkt hinzufügen/entfernen/ändern
+5. Liste anzeigen
+
+
+
+
 ## Wie startet man die Applikation?
 [Wie startet man die Applikation? Welche Voraussetzungen werden benötigt? Schritt-für-Schritt-Anleitung]
-- Java 17+
-- Man führt die .jar Datei aus.
+
+- Java 11+ muss installiert sein
+- Source-Code von [Github](https://github.com/SuperLonci/advanced-shopping-list) herunterladen. Link: https://github.com/SuperLonci/advanced-shopping-list
+- kompilieren und ausführen
+
+oder:
+- advanced-shopping-list-x.x.jar im Terminal starten
+
 ## Wie testet man die Applikation?
 [Wie testet man die Applikation? Welche Voraussetzungen werden benötigt? Schritt-für-Schritt-Anleitung]
-habe keine tests lol
+
+- Maven und Java müssen vorhanden sein
+- Mit dem Befehl `mvn clean test` können alle Tests durchgeführt werden.
 
 
 # Kapitel 2: Clean Architecture
@@ -341,7 +378,7 @@ Betrachtet man nur die Application und die Domain liegt die Line-Coverage bei 86
 
 ## Fakes und Mocks
 
-TODO: UML-Diagramme für MockDataProvider und MockRepository
+<img src="./images/Mocks_UML.svg">
 
 Für die Durchführung der Tests wurden 2 Mock-Objekte erstellt: `MockDataProvider` und `MockRepository`. Der Data-Provider stellt verschiedene Produkte und Shops für die Tests zur Verfügung, ohne das dafür XML-Dateien eingelesen werden müssen. Das Repository stellt verwaltet die ShoppingLists, die während den Tests gebraucht werden, ohne diese auf die Festplatte zu persistieren. So können alle Tests ohne Abhängigkeiten von externen Faktoren durchgeführt werden.
 
@@ -670,12 +707,12 @@ private void removeProduct(){
 
 ## Entwurfsmuster: Builder-Pattern
 
-TODO: UML-Diagramm von Buildern
+<img src="./images/Builder_UML.svg">
 
 Für das Erstellen der verschiedenen Entity-Klassen wurde das Builder-Pattern eingesetzt. Dafür hat jede Klasse eine weitere Klasse, die dessen Builder darstellt. Beispielsweise existiert für die `ShoppingList` Klasse, die Builder-Klasse `ShoppingListBuilder`. Mithilfe dieser Builder können leicht Parameter für das Erstellen von neuen Objekten hinzugefügt werden. Da Java keine optionalen Parameter unterstützt, müssten ohne das Builder-Pattern eigene Konstruktor-Methoden für jede Kombination von Parametern erstellt werden.
 
 ## Entwurfsmuster: Mediator
- 
-TODO: UML-Diagramm (Links: Alle Menüs, Mitte: Application, Rechts: DataProvider und Repository)
+
+<img src="./images/Mediator_UML.svg"> 
 
 Der grundlegende Aufbau der Anwendung folgt dem sogenannten Mediator-Pattern. Bei diesem Pattern läuft die Kommunikation zwischen den Objekten über einen zentralen Anlaufpunkt, sodass es keine Abhängigkeiten zwischen allen Objekten gibt, sondern lediglich mit dem Mediator-Objekt. In diesem Fall ist der Mediator die `Application`-Klasse. Die einzelnen Menüs greifen immer nur über diese Klasse auf die anderen Objekte, wie z.b. das Repository zu. Dadurch wird die genaue Implementierung der Funktionen versteckt und es gibt weniger Abhängigkeiten zwischen den Teilen der Anwendung.
