@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 Programmentwurf
 Einkaufsmanager
 
@@ -16,35 +8,17 @@ Martrikelnummer: 6902907
 
 Abgabedatum: 29.05.2022
 
-
-Allgemeine Anmerkungen: 
-    • es darf nicht auf andere Kapitel als Leistungsnachweis verwiesen werden (z.B. in der Form “XY wurde schon in Kapitel 2 behandelt, daher hier keine Ausführung”)
-    • alles muss in UTF-8 codiert sein (Text und Code)
-    • sollten mündliche Aussagen den schriftlichen Aufgaben widersprechen, gelten die schriftlichen Aufgaben (ggf. an Anpassung der schriftlichen Aufgaben erinnern!)
-    • alles muss ins Repository (Code, Ausarbeitung und alles was damit zusammenhängt)
-    • die Beispiele sollten wenn möglich vom aktuellen Stand genommen werden
-        ◦ finden sich dort keine entsprechenden Beispiele, dürfen auch ältere Commits unter Verweis auf den Commit verwendet werden 
-        ◦ Ausnahme: beim Kapitel “Refactoring” darf von vorne herein aus allen Ständen frei gewählt werden (mit Verweis auf den entsprechenden Commit)
-    • falls verlangte Negativ-Beispiele nicht vorhanden sind, müssen entsprechend mehr Positiv-Beispiele gebracht werden
-        ◦ Achtung: werden im Code entsprechende Negativ-Beispiele gefunden, gibt es keine Punkte für die zusätzlichen Positiv-Beispiele
-        ◦ Beispiele
-            ▪ “Nennen Sie jeweils eine Klasse, die das SRP einhält bzw. verletzt.”
-                • Antwort: Es gibt keine Klasse, die SRP verletzt, daher hier 2 Klassen, die SRP einhalten: [Klasse 1], [Klasse 2]
-                • Bewertung: falls im Code tatsächlich keine Klasse das SRP verletzt: volle Punktzahl ODER falls im Code mind. eine Klasse SRP verletzt: halbe Punktzahl
-    • verlangte Positiv-Beispiele müssen gebracht werden
-    • Code-Beispiel = Code in das Dokument kopieren
-
       
 # Kapitel 1: Einführung
 
 ## Übersicht über die Applikation
 [Was macht die Applikation? Wie funktioniert sie? Welches Problem löst sie/welchen Zweck hat sie?]
 
-[Github Repository](https://github.com/SuperLonci/advanced-shopping-list)
+[Github Repository Advanced Shopping List](https://github.com/SuperLonci/advanced-shopping-list)
 
 Es handelt sich um die neuste und innovativste Erfindung in der Geschichte des Einkaufens. 
 Sie ermöglicht eine Zuteilung der benötigten Produkte auf die Geschäfte in denen man sie am liebsten erwerben möchte. 
-Darüber hinaus werden vervollständigte Eingaben vorgeschlagen. So muss man nur `Kart` eingeben um seine lokalen Lieblingskartoffeln vorgeschlagen zu bekommen. 
+Darüber hinaus werden vervollständigte Eingaben vorgeschlagen. So muss man nur `Kart` eingeben um (nach einer Bestätigung der Eingabe) seine lokalen Lieblingskartoffeln vorgeschlagen zu bekommen. 
 Anschließen wird man vor die Auswahl gestellt in welcher Kette man das Produkt erwerben möchte, vorausgesetzt diese bietet es an.
 Sie löst das Problem einer unstrukturierten Einkaufsliste und dem Gefühl die ganze Zeit über Produkte der Einkaufliste "drüber" lesen zu müssen, da das Geschäft diese nicht anbietet.
 Gleichzeitig kann so mehr Wert auf lokale Produkte gelegt werden und der Lieblingsmetzger um die Ecke zum Fleischkauf gewählt werden.
@@ -56,15 +30,13 @@ Workflow:
 
     bereits eine Einkaufsliste existiert:
     - Einkaufsliste auswählen
-
+    
     noch keine Einkaufsliste existiert:
     - Einkaufsliste erstellen und auswählen
 
 3. Manage Shopping List wählen
 4. Produkt hinzufügen/entfernen/ändern
 5. Liste anzeigen
-
-
 
 
 ## Wie startet man die Applikation?
